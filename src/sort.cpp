@@ -50,7 +50,7 @@ void sort_insertion(LinkedList& list) {
     list.head = sorted;
 }
 
-Node * merge (Node* left, Node* right) {
+Node* merge (Node* left, Node* right) {
     if (left == nullptr) return right;
     if (right == nullptr) return left;
 
