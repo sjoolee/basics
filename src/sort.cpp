@@ -50,6 +50,19 @@ void sort_insertion(LinkedList& list) {
     list.head = sorted;
 }
 
+Node * merge (Node* left, Node* right) {
+    if (left == nullptr) return right;
+    if (right == nullptr) return left;
+
+    if (left->value <= right->value) {
+        left->next = merge(left->next, right);
+        return left;
+    } else {
+        right->next = merge(left, right->next);
+        return right;
+    }
+}
+
 void sort_merge(LinkedList& list) {
     if (list.head == nullptr || list.head->next == nullptr) {return;} //List is already sorted
 
@@ -65,50 +78,28 @@ void sort_merge(LinkedList& list) {
     Node* mid = slow->next;
     slow->next = nullptr;
 
-    LinkedList left_list;
-    left_list.head = list.head;
-    left_list.size = 0; // Size will be recalculated
+    LinkedList left;
+    left.head = list.head;
+    left.size = 0; // Size will be recalculated
 
-    LinkedList right_list;
-    right_list.head = mid;
-    right_list.size = 0;
+    LinkedList right;
+    right.head = mid;
+    right.size = 0;
 
-    sort_merge(left_list);
-    sort_merge(right_list);
+    //sort each half recursively
+    sort_merge(left);
+    sort_merge(right);
 
-    // Merge the two sorted halves
-    Node* merged_head = nullptr;
-    Node** merged_tail = &merged_head;
-
-    Node* left_node = left_list.head;
-    Node* right_node = right_list.head;
-
-    while (left_node != nullptr && right_node != nullptr) {
-        if (left_node->value < right_node->value) {
-            *merged_tail = left_node;
-            left_node = left_node->next;
-        } else {
-            *merged_tail = right_node;
-            right_node = right_node->next;
-        }
-        merged_tail = &((*merged_tail)->next);
-    }
-
-    if (left_node != nullptr) {
-        *merged_tail = left_node;
-    } else {
-        *merged_tail = right_node;
-    }
-
-    list.head = merged_head;
-    left_list.head = nullptr; // Avoid double deletion
-    right_list.head = nullptr;
+    //merge the halves
+    list.head = merge(left.head, right.head);
     
-    int new_size = 0; // Recalculate size
+    left.head = nullptr; // Avoid double deletion
+    right.head = nullptr;
+    
+    list.size = 0; // Recalculate size
     Node* current = list.head;
     while (current != nullptr) {
-        new_size++;
+        list.size++;
         current = current->next;
     }
-    list.size = new_size;
 }
