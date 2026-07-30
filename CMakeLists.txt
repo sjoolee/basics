@@ -42,10 +42,7 @@ if (PROFILING_ENABLED)
 endif()
 
 
-
 FetchContent_MakeAvailable(googlebenchmark)
-
-
 
 
 include_directories(
@@ -56,8 +53,8 @@ project(basics)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(basics
-        ${CMAKE_SOURCE_DIR}/vec_add_driver.cpp
-        ${CMAKE_SOURCE_DIR}/src/vec_add.cpp
+        ${CMAKE_SOURCE_DIR}/test/sort.cpp
+        ${CMAKE_SOURCE_DIR}/src/sort.cpp
         )
 target_link_libraries(basics
         benchmark::benchmark )
